@@ -1,0 +1,464 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Просмотр блюда - SUHI BAR</title>
+    <link rel="icon" href="/images/logo.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #ff4d4f;
+            --dark: #333;
+            --gray: #666;
+            --light-gray: #f5f5f5;
+            --border: #e8e8e8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f9f9f9;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+            .logo img {
+                height: 40px;
+            }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+            .back-btn:hover {
+                background: var(--light-gray);
+                border-color: var(--primary);
+            }
+
+        /* Sushi Detail */
+        .sushi-detail {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .sushi-detail {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .sushi-image {
+            width: 100%;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+            .sushi-image img {
+                width: 100%;
+                height: auto;
+                display: block;
+            }
+
+        .sushi-info {
+            padding: 20px 0;
+        }
+
+        .sushi-name {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .sushi-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .sushi-description {
+            font-size: 1.1rem;
+            color: var(--gray);
+            margin-bottom: 30px;
+            line-height: 1.7;
+        }
+
+        .sushi-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .detail-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--light-gray);
+            border-radius: 50%;
+            color: var(--primary);
+        }
+
+        .detail-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .detail-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .detail-value {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .add-to-cart {
+            flex: 1;
+            padding: 15px 25px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+            .add-to-cart:hover {
+                background: #ff7875;
+            }
+
+            .add-to-cart:disabled {
+                background: var(--gray);
+                cursor: not-allowed;
+            }
+
+        .back-to-menu {
+            padding: 15px 25px;
+            background: white;
+            color: var(--dark);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+            .back-to-menu:hover {
+                background: var(--light-gray);
+                border-color: var(--primary);
+            }
+
+        /* Loading and Error */
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: var(--gray);
+            font-size: 18px;
+        }
+
+        .error {
+            background: #fff2f0;
+            border: 1px solid #ffccc7;
+            color: #ff4d4f;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: #52c41a;
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateX(150%);
+            transition: transform 0.3s;
+        }
+
+            .notification.show {
+                transform: translateX(0);
+            }
+
+            .notification.error {
+                background: #ff4d4f;
+            }
+
+        /* Footer */
+        .footer {
+            margin-top: 60px;
+            padding: 30px 0;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--gray);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <a href="/" class="logo">
+                <img src="/images/logo.png" alt="SUHI BAR">
+                SUHI BAR
+            </a>
+            <a href="/" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Назад к меню
+            </a>
+        </div>
+
+        <!-- Sushi Detail -->
+        <div id="sushi-detail-container">
+            <div class="loading">
+                <i class="fas fa-spinner fa-spin"></i> Загружаем информацию о блюде...
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>&copy; 2023 SUHI BAR. Все права защищены.</p>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notification-text"></span>
+    </div>
+
+    <script>
+        // Получаем ID суши из URL
+        function getSushiIdFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('id');
+        }
+
+        // Загружаем информацию о блюде
+        async function loadSushiDetail() {
+            const sushiId = getSushiIdFromUrl();
+
+            if (!sushiId) {
+                showError('ID блюда не указан');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/Sushi/current/${sushiId}`);
+
+                if (!response.ok) {
+                    throw new Error('Ошибка загрузки данных');
+                }
+
+                const result = await response.json();
+
+                if (result.sushi) {
+                    renderSushiDetail(result.sushi);
+                } else {
+                    showError('Блюдо не найдено');
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+                showError('Ошибка загрузки информации о блюде: ' + error.message);
+            }
+        }
+
+        // Отображаем информацию о блюде
+        function renderSushiDetail(sushi) {
+            const container = document.getElementById('sushi-detail-container');
+
+            container.innerHTML = `
+                <div class="sushi-detail">
+                    <div class="sushi-image">
+                        <img src="${sushi.photo || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjgwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjVmNWY1Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxOCIgZmlsbD0iIzY2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuKEllN1c2hpIEJhcjwvdGV4dD48L3N2Zz4='}" alt="${sushi.name}">
+                    </div>
+                    <div class="sushi-info">
+                        <h1 class="sushi-name">${sushi.name}</h1>
+                        <div class="sushi-price">${sushi.cost} ₽</div>
+                        <p class="sushi-description">${sushi.description}</p>
+
+                        <div class="sushi-details">
+                            <div class="detail-item">
+                                <div class="detail-icon">
+                                    <i class="fas fa-weight-hanging"></i>
+                                </div>
+                                <div class="detail-text">
+                                    <span class="detail-label">Вес</span>
+                                    <span class="detail-value">${sushi.weigth} г</span>
+                                </div>
+                            </div>
+
+                            <div class="detail-item">
+                                <div class="detail-icon">
+                                    <i class="fas fa-box"></i>
+                                </div>
+                                <div class="detail-text">
+                                    <span class="detail-label">Количество</span>
+                                    <span class="detail-value">${sushi.count} шт</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button class="add-to-cart" onclick="addToCart(${sushi.id})">
+                                <i class="fas fa-plus"></i>
+                                Добавить в корзину
+                            </button>
+                            <a href="/" class="back-to-menu">
+                                <i class="fas fa-arrow-left"></i>
+                                Назад к меню
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Показываем ошибку
+        function showError(message) {
+            const container = document.getElementById('sushi-detail-container');
+            container.innerHTML = `
+                <div class="error">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p>${message}</p>
+                    <button onclick="location.reload()">Попробовать снова</button>
+                </div>
+            `;
+        }
+
+        // Добавляем в корзину
+        async function addToCart(sushiId) {
+            try {
+                const response = await fetch('/api/Sushi/cart/add', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        sushi_id: sushiId,
+                        quantity: 1
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showNotification('Товар добавлен в корзину!');
+                } else {
+                    showNotification('Ошибка при добавлении в корзину: ' + result.message, true);
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+                showNotification('Ошибка при добавлении в корзину', true);
+            }
+        }
+
+        // Показываем уведомление
+        function showNotification(message, isError = false) {
+            const notification = document.getElementById('notification');
+            const text = document.getElementById('notification-text');
+
+            text.textContent = message;
+
+            if (isError) {
+                notification.classList.add('error');
+            } else {
+                notification.classList.remove('error');
+            }
+
+            notification.classList.add('show');
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Загружаем информацию о блюде при загрузке страницы
+        document.addEventListener('DOMContentLoaded', loadSushiDetail);
+    </script>
+</body>
+</html>

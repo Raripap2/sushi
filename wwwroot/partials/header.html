@@ -1,0 +1,35 @@
+﻿<header class="header">
+    <div class="header-top">
+        <div class="header-top-container">
+            <div>🚚 Бесплатная доставка от 1000 рублей</div>
+            <div>⏰ Время работы: 10:00 - 23:00</div>
+        </div>
+    </div>
+
+    <div class="header-main">
+        <div class="header-container">
+            <a href="/sushi" class="logo" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+                <img src="/images/logo.png" alt="SUHI BAR" style="height: 30px; width: 30px; margin-right: 10px;">
+                SUHI<span>BAR</span>
+            </a>
+
+            <nav class="nav">
+                <a href="/sushi">Главная</a>
+                <a href="#about">О нас</a>
+                <a href="#contacts">Контакты</a>
+            </nav>
+
+            <div class="user-actions">
+                <div class="user-profile" onclick="openProfile()">
+                    <img id="userAvatar" class="user-avatar" src="https://ir-3.ozone.ru/s3/multimedia-b/w1200/6812619491.jpg" alt="Аватар">
+                    <span id="username">Привет, Гость</span>
+                </div>
+                <button class="cart-btn" onclick="openCart()">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </button>
+                <button class="logout-btn" onclick="logout()">Выйти</button>
+            </div>
+        </div>
+    </div>
+</header>

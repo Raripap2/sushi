@@ -1,0 +1,1093 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль - SUHI BAR</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="/images/logo.png" type="image/png">
+    <link rel="stylesheet" href="/css/common.css">
+    <style>
+        :root {
+            --primary: #ff4d4f;
+            --secondary: #1890ff;
+            --accent: #52c41a;
+            --dark: #262626;
+            --light: #f9f9f9;
+            --gray: #8c8c8c;
+            --border: #f0f0f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 40px;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--primary);
+        }
+
+        .profile-info h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .profile-info p {
+            color: var(--gray);
+            margin-bottom: 5px;
+        }
+
+        .profile-edit-btn {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+            .profile-edit-btn:hover {
+                background: #ff7875;
+            }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--dark);
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+            .section-title::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 60px;
+                height: 3px;
+                background: var(--primary);
+            }
+
+        .profile-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .info-item {
+            margin-bottom: 15px;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .info-value {
+            color: var(--gray);
+        }
+
+        .no-data {
+            color: var(--gray);
+            font-style: italic;
+        }
+
+        .address-actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+            .btn-primary:hover {
+                background: #ff7875;
+            }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: white;
+        }
+
+            .btn-secondary:hover {
+                background: #40a9ff;
+            }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+            .modal-overlay.active {
+                opacity: 1;
+                visibility: visible;
+            }
+
+        .modal {
+            background: white;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            transform: translateY(-20px);
+            transition: transform 0.3s;
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: var(--dark);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+            .form-input:focus {
+                outline: none;
+                border-color: var(--secondary);
+            }
+
+        .form-checkbox {
+            margin-right: 10px;
+        }
+
+        .map-container {
+            position: relative;
+            height: 300px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .geolocation-btn-container {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            z-index: 1000;
+        }
+
+        .geolocation-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+            .geolocation-btn:hover {
+                background: var(--secondary);
+                color: white;
+                transform: scale(1.1);
+            }
+
+            .geolocation-btn.loading {
+                animation: pulse 1.5s infinite;
+            }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .geolocation-error {
+            position: absolute;
+            top: 70px;
+            right: 15px;
+            background: #ff4d4f;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav {
+                gap: 15px;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .user-actions {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .address-actions {
+                flex-direction: column;
+            }
+
+            .geolocation-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+
+            .geolocation-error {
+                top: 60px;
+                right: 10px;
+                font-size: 12px;
+                padding: 8px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div class="profile-header">
+            <img id="profileAvatar" class="profile-avatar" src="https://ir-3.ozone.ru/s3/multimedia-b/w1200/6812619491.jpg" alt="Аватар профиля">
+            <div class="profile-info">
+                <h1 id="profileName">Имя пользователя</h1>
+                <p id="profileLogin">Логин: loading...</p>
+                <p id="profileEmail">Email: loading...</p>
+                <button class="profile-edit-btn" onclick="editProfile()">Редактировать профиль</button>
+            </div>
+        </div>
+
+        <div class="profile-section">
+            <h2 class="section-title">Адрес доставки</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Город</div>
+                    <div id="addressCity" class="info-value no-data">Не указано</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Улица</div>
+                    <div id="addressStreet" class="info-value no-data">Не указано</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Дом</div>
+                    <div id="addressHouse" class="info-value no-data">Не указано</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Подъезд</div>
+                    <div id="addressEntrance" class="info-value no-data">Не указано</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Этаж</div>
+                    <div id="addressFloor" class="info-value no-data">Не указано</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Квартира</div>
+                    <div id="addressFlat" class="info-value no-data">Не указано</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Домофон</div>
+                    <div id="addressIntercom" class="info-value no-data">Не указано</div>
+                </div>
+            </div>
+            <div class="address-actions" id="addressActions">
+                <!-- Кнопки будут добавлены динамически -->
+            </div>
+        </div>
+
+        <div class="profile-section">
+            <h2 class="section-title">История заказов</h2>
+            <div id="orderHistory">
+                <p class="no-data">Заказов пока нет</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer"></div>
+
+    <!-- Модальное окно для добавления/редактирования адреса -->
+    <div class="modal-overlay" id="addressModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Добавить адрес</h3>
+                <button class="modal-close" onclick="closeAddressModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="map-container" id="addressMap">
+                    <div class="geolocation-btn-container">
+                        <button class="geolocation-btn" id="geolocationBtn" title="Определить мое местоположение">
+                            <i class="fas fa-location-arrow"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Город</label>
+                    <input type="text" id="inputCity" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Улица</label>
+                    <input type="text" id="inputStreet" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Дом</label>
+                    <input type="number" id="inputHouse" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Подъезд</label>
+                    <input type="number" id="inputEntrance" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Этаж</label>
+                    <input type="number" id="inputFloor" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Квартира</label>
+                    <input type="number" id="inputFlat" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="inputIntercom" class="form-checkbox">
+                        Есть домофон
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeAddressModal()">Отмена</button>
+                <button class="btn btn-primary" id="saveAddressBtn" onclick="saveAddress()">Сохранить адрес</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Загрузка header
+        fetch('/partials/header.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('header').innerHTML = html;
+            });
+
+        // Загрузка footer
+        fetch('/partials/footer.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('footer').innerHTML = html;
+            });
+    </script>
+    <script src="/js/common.js"></script>
+    <script>
+        // Глобальные переменные
+        let map, placemark, hasAddress = false;
+        let selectedLocation = null;
+        let ymapsLoaded = false;
+
+        document.addEventListener('DOMContentLoaded', async function () {
+            await loadUserProfile();
+            initAddressActions();
+            initPage();
+        });
+
+        // Функция для загрузки Яндекс.Карт
+        function loadYandexMaps() {
+            return new Promise((resolve, reject) => {
+                if (typeof ymaps !== 'undefined') {
+                    resolve(ymaps);
+                    return;
+                }
+
+                const script = document.createElement('script');
+                script.src = 'https://api-maps.yandex.ru/2.1/?apikey=9f6c0d2f-0f45-4e13-8061-bba90da650e2&lang=ru_RU';
+                script.type = 'text/javascript';
+
+                script.onload = () => {
+                    console.log('Яндекс.Карты успешно загружены');
+                    ymapsLoaded = true;
+                    resolve(ymaps);
+                };
+
+                script.onerror = (error) => {
+                    console.error('Ошибка загрузки Яндекс.Карт:', error);
+                    showMapError();
+                    reject(error);
+                };
+
+                document.head.appendChild(script);
+            });
+        }
+
+        function showMapError() {
+            const mapContainer = document.getElementById('addressMap');
+            if (mapContainer) {
+                mapContainer.innerHTML = `
+                                    <div style="padding: 40px 20px; text-align: center; color: #666; background: #f9f9f9; border-radius: 8px;">
+                                        <i class="fas fa-exclamation-triangle" style="font-size: 48px; margin-bottom: 15px; color: #ff4d4f;"></i>
+                                        <h3 style="margin-bottom: 10px;">Не удалось загрузить карту</h3>
+                                        <p style="margin-bottom: 15px;">Пожалуйста, отключите AdBlocker для этого сайта</p>
+                                        <button onclick="retryLoadMap()" style="padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: 5px; cursor: pointer;">
+                                            Попробовать снова
+                                        </button>
+                                    </div>
+                                `;
+            }
+        }
+
+        function retryLoadMap() {
+            const mapContainer = document.getElementById('addressMap');
+            mapContainer.innerHTML = '<div style="padding: 20px; text-align: center;">Загрузка карты...</div>';
+
+            setTimeout(() => {
+                loadYandexMaps().then(ymaps => {
+                    initMap();
+                });
+            }, 1000);
+        }
+
+        async function loadUserProfile() {
+            try {
+                const response = await fetch('/api/Users/profile');
+
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        window.location.href = '/login';
+                        return;
+                    }
+                    throw new Error('Ошибка загрузки профиля');
+                }
+
+                const userData = await response.json();
+
+                // Заполняем информацию о пользователе
+                document.getElementById('profileName').textContent = userData.username || userData.login || 'Пользователь';
+                document.getElementById('profileLogin').textContent = `Логин: ${userData.login || 'Не указан'}`;
+                document.getElementById('profileEmail').textContent = `Email: ${userData.email || 'Не указан'}`;
+
+                // Обновляем аватар, если есть
+                if (userData.photo) {
+                    document.getElementById('profileAvatar').src = userData.photo;
+                    const userAvatar = document.getElementById('userAvatar');
+                    if (userAvatar) {
+                        userAvatar.src = userData.photo;
+                    }
+                }
+
+                // Проверяем, есть ли адрес
+                hasAddress = !!(userData.city && userData.street && userData.house);
+
+                // Заполняем информацию об адресе
+                if (userData.city) document.getElementById('addressCity').textContent = userData.city;
+                if (userData.street) document.getElementById('addressStreet').textContent = userData.street;
+                if (userData.house) document.getElementById('addressHouse').textContent = userData.house;
+                if (userData.entrance) document.getElementById('addressEntrance').textContent = userData.entrance;
+                if (userData.floor) document.getElementById('addressFloor').textContent = userData.floor;
+                if (userData.flat) document.getElementById('addressFlat').textContent = userData.flat;
+
+                // Обрабатываем домофон
+                const intercomElement = document.getElementById('addressIntercom');
+                if (userData.intercom !== null && userData.intercom !== undefined) {
+                    intercomElement.textContent = userData.intercom ? 'Есть' : 'Нет';
+                }
+
+                // Обновляем имя пользователя в шапке
+                const username = userData.username || userData.login || 'Гость';
+                const usernameElement = document.getElementById('username');
+                if (usernameElement) {
+                    usernameElement.textContent = `Привет, ${username}`;
+                }
+
+            } catch (error) {
+                console.error('Ошибка загрузки профиля:', error);
+                alert('Не удалось загрузить данные профиля');
+            }
+        }
+
+        function initAddressActions() {
+            const actionsContainer = document.getElementById('addressActions');
+
+            if (hasAddress) {
+                actionsContainer.innerHTML = `
+                                        <button class="btn btn-primary" onclick="editAddress()">Редактировать адрес</button>
+                                    `;
+            } else {
+                actionsContainer.innerHTML = `
+                                        <button class="btn btn-primary" onclick="addAddress()">Добавить адрес</button>
+                                    `;
+            }
+        }
+
+        function addAddress() {
+            document.getElementById('modalTitle').textContent = 'Добавить адрес';
+            document.getElementById('saveAddressBtn').setAttribute('data-action', 'add');
+            openAddressModal();
+        }
+
+        function editAddress() {
+            document.getElementById('modalTitle').textContent = 'Редактировать адрес';
+            document.getElementById('saveAddressBtn').setAttribute('data-action', 'edit');
+
+            // Заполняем форму текущими значениями
+            document.getElementById('inputCity').value = document.getElementById('addressCity').textContent !== 'Не указано' ?
+                document.getElementById('addressCity').textContent : '';
+            document.getElementById('inputStreet').value = document.getElementById('addressStreet').textContent !== 'Не указано' ?
+                document.getElementById('addressStreet').textContent : '';
+            document.getElementById('inputHouse').value = document.getElementById('addressHouse').textContent !== 'Не указано' ?
+                document.getElementById('addressHouse').textContent : '';
+            document.getElementById('inputEntrance').value = document.getElementById('addressEntrance').textContent !== 'Не указано' ?
+                document.getElementById('addressEntrance').textContent : '';
+            document.getElementById('inputFloor').value = document.getElementById('addressFloor').textContent !== 'Не указано' ?
+                document.getElementById('addressFloor').textContent : '';
+            document.getElementById('inputFlat').value = document.getElementById('addressFlat').textContent !== 'Не указано' ?
+                document.getElementById('addressFlat').textContent : '';
+            document.getElementById('inputIntercom').checked = document.getElementById('addressIntercom').textContent === 'Есть';
+
+            openAddressModal();
+        }
+
+        function openAddressModal() {
+            const modal = document.getElementById('addressModal');
+            modal.classList.add('active');
+
+            // Загружаем карты только при необходимости
+            if (!ymapsLoaded) {
+                loadYandexMaps().then(() => {
+                    initMap();
+                    centerMapOnUserLocation();
+                });
+            } else if (!map) {
+                initMap();
+                centerMapOnUserLocation();
+            } else {
+                centerMapOnUserLocation();
+            }
+        }
+
+        // Функция для определения местоположения
+        function locateUser() {
+            const btn = document.getElementById('geolocationBtn');
+            btn.classList.add('loading');
+
+            if (!navigator.geolocation) {
+                showGeolocationError('Геолокация не поддерживается вашим браузером');
+                btn.classList.remove('loading');
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    centerMapOnLocation(latitude, longitude);
+                    reverseGeocode(latitude, longitude);
+                    btn.classList.remove('loading');
+                },
+                (error) => {
+                    handleGeolocationError(error);
+                    btn.classList.remove('loading');
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 60000
+                }
+            );
+        }
+
+        // Центрирование карты на указанных координатах
+        function centerMapOnLocation(latitude, longitude) {
+            if (!map) return;
+
+            map.setCenter([latitude, longitude], 17);
+
+            if (placemark) {
+                placemark.geometry.setCoordinates([latitude, longitude]);
+            } else {
+                placemark = createPlacemark([latitude, longitude]);
+                map.geoObjects.add(placemark);
+            }
+
+            selectedLocation = { lat: latitude, lng: longitude };
+        }
+
+        // Обработка ошибок геолокации
+        function handleGeolocationError(error) {
+            let errorMessage = 'Не удалось определить местоположение';
+
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    errorMessage = 'Доступ к геолокации запрещен. Разрешите доступ в настройках браузера';
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    errorMessage = 'Информация о местоположении недоступна';
+                    break;
+                case error.TIMEOUT:
+                    errorMessage = 'Время ожидания определения местоположения истекло';
+                    break;
+            }
+
+            showGeolocationError(errorMessage);
+        }
+
+        // Показать сообщение об ошибке
+        function showGeolocationError(message) {
+            // Удаляем предыдущие сообщения об ошибках
+            const existingError = document.querySelector('.geolocation-error');
+            if (existingError) {
+                existingError.remove();
+            }
+
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'geolocation-error';
+            errorDiv.innerHTML = `
+                                <i class="fas fa-exclamation-circle"></i>
+                                ${message}
+                            `;
+
+            const mapContainer = document.getElementById('addressMap');
+            mapContainer.appendChild(errorDiv);
+
+            // Автоматическое скрытие через 5 секунд
+            setTimeout(() => {
+                if (errorDiv.parentNode) {
+                    errorDiv.remove();
+                }
+            }, 5000);
+        }
+
+        function centerMapOnUserLocation() {
+            if (!map) return;
+
+            // Показываем сообщение о загрузке
+            const loadingMessage = document.createElement('div');
+            loadingMessage.style.cssText = `
+                                position: absolute;
+                                top: 50%;
+                                left: 50%;
+                                transform: translate(-50%, -50%);
+                                background: rgba(255,255,255,0.9);
+                                padding: 20px;
+                                border-radius: 8px;
+                                z-index: 999;
+                                text-align: center;
+                            `;
+            loadingMessage.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Загрузка карты...';
+
+            const mapContainer = document.getElementById('addressMap');
+            mapContainer.appendChild(loadingMessage);
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const { latitude, longitude } = position.coords;
+                        centerMapOnLocation(latitude, longitude);
+                        reverseGeocode(latitude, longitude);
+                        loadingMessage.remove();
+                    },
+                    (error) => {
+                        // По умолчанию центрируем на Москве, если геолокация недоступна
+                        map.setCenter([55.7558, 37.6173], 10);
+                        loadingMessage.remove();
+                    },
+                    {
+                        timeout: 5000,
+                        maximumAge: 300000
+                    }
+                );
+            } else {
+                map.setCenter([55.7558, 37.6173], 10);
+                loadingMessage.remove();
+            }
+        }
+
+        function closeAddressModal() {
+            const modal = document.getElementById('addressModal');
+            modal.classList.remove('active');
+        }
+
+        function initMap() {
+            if (typeof ymaps === 'undefined') {
+                showMapError();
+                return;
+            }
+
+            ymaps.ready(function () {
+                try {
+                    map = new ymaps.Map('addressMap', {
+                        center: [55.7558, 37.6173],
+                        zoom: 10,
+                        controls: ['zoomControl', 'fullscreenControl']
+                    });
+
+                    // Добавляем обработчик для кнопки геолокации
+                    const geolocationBtn = document.getElementById('geolocationBtn');
+                    if (geolocationBtn) {
+                        geolocationBtn.addEventListener('click', locateUser);
+                    }
+
+                    // Обработчик клика по карте
+                    map.events.add('click', function (e) {
+                        const coords = e.get('coords');
+
+                        if (!placemark) {
+                            placemark = createPlacemark(coords);
+                            map.geoObjects.add(placemark);
+                        } else {
+                            placemark.geometry.setCoordinates(coords);
+                        }
+                        selectedLocation = { lat: coords[0], lng: coords[1] };
+
+                        // Получаем адрес по координатам
+                        reverseGeocode(coords[0], coords[1]);
+                    });
+                } catch (error) {
+                    console.error('Ошибка инициализации карты:', error);
+                    showMapError();
+                }
+            });
+        }
+
+        function createPlacemark(coords) {
+            return new ymaps.Placemark(coords, {
+                iconCaption: 'выбранное местоположение'
+            }, {
+                preset: 'islands#violetDotIconWithCaption',
+                draggable: true
+            });
+        }
+
+        function reverseGeocode(lat, lng) {
+            if (typeof ymaps === 'undefined') return;
+
+            ymaps.geocode([lat, lng]).then(function (res) {
+                const firstGeoObject = res.geoObjects.get(0);
+
+                if (!firstGeoObject) {
+                    return;
+                }
+
+                // Получаем компоненты адреса правильно
+                const address = firstGeoObject.getAddressLine();
+
+                // Получаем структурированные компоненты адреса
+                const addressComponents = firstGeoObject.getThoroughfare()
+                    ? firstGeoObject.properties.get('metaDataProperty.GeocoderMetaData.Address.Components')
+                    : null;
+
+                // Заполняем город
+                const locality = firstGeoObject.getLocalities();
+                if (locality.length > 0) {
+                    document.getElementById('inputCity').value = locality[0];
+                }
+
+                // Заполняем улицу
+                const thoroughfare = firstGeoObject.getThoroughfare();
+                if (thoroughfare) {
+                    document.getElementById('inputStreet').value = thoroughfare;
+                }
+
+                // Заполняем номер дома
+                const premise = firstGeoObject.getPremise();
+                const premiseNumber = firstGeoObject.getPremiseNumber();
+                if (premiseNumber) {
+                    document.getElementById('inputHouse').value = premiseNumber;
+                } else if (premise) {
+                    // Пытаемся извлечь номер дома из поля premise
+                    const houseMatch = premise.match(/(\d+[\w\-]*)/);
+                    if (houseMatch) {
+                        document.getElementById('inputHouse').value = houseMatch[1];
+                    }
+                }
+
+                // Альтернативный способ: парсим адресную строку
+                if (!thoroughfare || !premiseNumber) {
+                    const addressParts = address.split(',');
+
+                    // Обычно формат: "город, улица, дом"
+                    if (addressParts.length >= 3) {
+                        if (!locality.length) {
+                            document.getElementById('inputCity').value = addressParts[0].trim();
+                        }
+
+                        if (!thoroughfare) {
+                            const streetPart = addressParts[1].trim();
+                            // Убираем возможные "ул.", "улица" и т.д.
+                            const streetName = streetPart.replace(/^(ул\.?|улица|просп\.?|проспект|пр\.?|бульвар|пер\.?|переулок)\s*/i, '');
+                            document.getElementById('inputStreet').value = streetName;
+                        }
+
+                        if (!premiseNumber) {
+                            const housePart = addressParts[2].trim();
+                            // Извлекаем номер дома
+                            const houseMatch = housePart.match(/(\d+[\w\-]*)/);
+                            if (houseMatch) {
+                                document.getElementById('inputHouse').value = houseMatch[1];
+                            } else {
+                                document.getElementById('inputHouse').value = housePart;
+                            }
+                        }
+                    }
+                }
+            }).catch(function (error) {
+                console.error('Ошибка геокодирования:', error);
+            });
+        }
+
+        async function saveAddress() {
+            const city = document.getElementById('inputCity').value.trim();
+            const street = document.getElementById('inputStreet').value.trim();
+            const house = document.getElementById('inputHouse').value.trim();
+
+            if (!city || !street || !house) {
+                alert('Пожалуйста, заполните обязательные поля: город, улица и дом');
+                return;
+            }
+
+            // Отладочный вывод
+            console.log('Отправляемые данные:', {
+                City: city,
+                Street: street,
+                House: house,
+                Entrance: document.getElementById('inputEntrance').value,
+                Floor: document.getElementById('inputFloor').value,
+                Flat: document.getElementById('inputFlat').value,
+                Intercom: document.getElementById('inputIntercom').checked
+            });
+
+            const addressData = {
+                City: city,
+                Street: street,
+                House: house, // Оставляем строкой, как в C# модели
+                Entrance: document.getElementById('inputEntrance').value ?
+                    parseInt(document.getElementById('inputEntrance').value) : null,
+                Floor: document.getElementById('inputFloor').value ?
+                    parseInt(document.getElementById('inputFloor').value) : null,
+                Flat: document.getElementById('inputFlat').value ?
+                    parseInt(document.getElementById('inputFlat').value) : null,
+                Intercom: document.getElementById('inputIntercom').checked
+            };
+
+            // Проверка числовых полей
+            if (addressData.Entrance !== null && isNaN(addressData.Entrance)) {
+                alert('Подъезд должен быть числом');
+                return;
+            }
+            if (addressData.Floor !== null && isNaN(addressData.Floor)) {
+                alert('Этаж должен быть числом');
+                return;
+            }
+            if (addressData.Flat !== null && isNaN(addressData.Flat)) {
+                alert('Квартира должна быть числом');
+                return;
+            }
+
+            try {
+                console.log('Отправка запроса на:', '/api/Users/address/edit');
+                console.log('Метод:', 'PUT');
+                console.log('Данные для отправки:', addressData);
+
+                const response = await fetch('/api/Users/address/edit', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(addressData)
+                });
+
+                console.log('Статус ответа:', response.status);
+                console.log('OK?', response.ok);
+
+                // Пробуем получить текст ответа даже если статус не OK
+                const responseText = await response.text();
+                console.log('Текст ответа:', responseText);
+
+                let result;
+                try {
+                    result = JSON.parse(responseText);
+                } catch (e) {
+                    console.error('Не удалось распарсить JSON:', e);
+                    console.error('Текст ответа был:', responseText);
+                    throw new Error('Сервер вернул некорректный JSON');
+                }
+
+                if (response.ok) {
+                    alert(result.message);
+                    closeAddressModal();
+                    await loadUserProfile();
+                    initAddressActions();
+                } else {
+                    console.error('Ошибка сервера:', result);
+                    alert('Ошибка: ' + (result.message || `Код ошибки: ${response.status}`));
+                }
+            } catch (error) {
+                console.error('Полная ошибка при сохранении адреса:', error);
+                console.error('Stack trace:', error.stack);
+
+                if (error.message.includes('JSON')) {
+                    alert('Ошибка формата ответа от сервера');
+                } else {
+                    alert('Произошла ошибка при сохранении адреса. Проверьте консоль для деталей.');
+                }
+            }
+        }
+
+        function editProfile() {
+            // Здесь будет переход на страницу редактирования профиля
+            alert('Функция редактирования профиля будет реализована позже');
+        }
+
+        // Закрытие модального окна при клике вне его
+        document.getElementById('addressModal').addEventListener('click', function (e) {
+            if (e.target === this) {
+                closeAddressModal();
+            }
+        });
+    </script>
+</body>
+</html>

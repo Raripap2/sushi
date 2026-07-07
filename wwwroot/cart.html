@@ -1,0 +1,473 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Корзина - SUHI BAR</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="/images/logo.png" type="image/png">
+    <link rel="stylesheet" href="/css/common.css">
+    <style>
+        :root {
+            --primary: #ff4d4f;
+            --secondary: #1890ff;
+            --accent: #52c41a;
+            --dark: #262626;
+            --light: #f9f9f9;
+            --gray: #8c8c8c;
+            --border: #f0f0f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .cart-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--dark);
+        }
+
+        /* Cart Items */
+        .cart-container {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .cart-items {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .cart-item {
+            display: grid;
+            grid-template-columns: 100px 1fr auto auto auto;
+            gap: 20px;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+            .cart-item:last-child {
+                border-bottom: none;
+            }
+
+        .item-image {
+            width: 100px;
+            height: 80px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        .item-name {
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .item-price {
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-btn {
+            width: 35px;
+            height: 35px;
+            border: 2px solid var(--border);
+            background: white;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+            .quantity-btn:hover {
+                background: var(--primary);
+                color: white;
+                border-color: var(--primary);
+            }
+
+        .quantity {
+            font-weight: 600;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .remove-btn {
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+
+            .remove-btn:hover {
+                color: var(--primary);
+            }
+
+        /* Cart Summary */
+        .cart-summary {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .summary-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 20px 0;
+            padding-top: 20px;
+            border-top: 2px solid var(--border);
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+            .checkout-btn:hover {
+                background: #ff7875;
+            }
+
+            .checkout-btn:disabled {
+                background: var(--gray);
+                cursor: not-allowed;
+            }
+
+        /* Empty Cart */
+        .empty-cart {
+            text-align: center;
+            padding: 60px;
+            color: var(--gray);
+        }
+
+            .empty-cart i {
+                font-size: 4rem;
+                margin-bottom: 20px;
+                color: var(--border);
+            }
+
+            .empty-cart p {
+                font-size: 1.2rem;
+                margin-bottom: 30px;
+            }
+
+        .continue-shopping {
+            padding: 15px 30px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+            .continue-shopping:hover {
+                background: #ff7875;
+            }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: var(--gray);
+        }
+
+            .loading i {
+                font-size: 2rem;
+            }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .cart-container {
+                grid-template-columns: 1fr;
+            }
+
+            .cart-item {
+                grid-template-columns: 80px 1fr;
+                grid-template-rows: auto auto;
+                gap: 10px;
+            }
+
+            .item-price,
+            .quantity-controls {
+                grid-column: 2;
+            }
+
+            .remove-btn {
+                grid-column: 2;
+                grid-row: 1;
+                justify-self: end;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cart-item {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .item-image {
+                justify-self: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- Main Content -->
+    <main class="container">
+        <h1 class="cart-title">Ваша корзина</h1>
+
+        <div id="cart-content">
+            <div class="loading">
+                <i class="fas fa-spinner fa-spin"></i> Загружаем корзину...
+            </div>
+        </div>
+    </main>
+
+    <div id="footer"></div>
+    <script>
+        // Загрузка header
+        fetch('/partials/header.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('header').innerHTML = html;
+            });
+
+        // Загрузка footer
+        fetch('/partials/footer.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('footer').innerHTML = html;
+            });
+    </script>
+    <script src="/js/common.js"></script>
+    <script>
+        let cartItems = [];
+
+        document.addEventListener('DOMContentLoaded', async function () {
+            loadCart();
+            initPage();
+        });
+        async function loadCart() {
+            try {
+                const response = await fetch('/api/Sushi/cart/get');
+
+                if (!response.ok) {
+                    throw new Error('Ошибка загрузки корзины');
+                }
+
+                const cartData = await response.json();
+                cartItems = cartData.items || [];
+                renderCart(cartItems, cartData.total);
+
+            } catch (error) {
+                console.error('Ошибка:', error);
+                document.getElementById('cart-content').innerHTML = `
+                                    <div class="error">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                        <p>Ошибка загрузки корзины: ${error.message}</p>
+                                        <button onclick="loadCart()">Попробовать снова</button>
+                                    </div>
+                                `;
+            }
+        }
+
+        function renderCart(items, total) {
+            const container = document.getElementById('cart-content');
+
+            if (items.length === 0) {
+                container.innerHTML = `
+                                    <div class="empty-cart">
+                                        <i class="fas fa-shopping-cart"></i>
+                                        <p>Ваша корзина пуста</p>
+                                        <a href="/sushi" class="continue-shopping">Перейти к меню</a>
+                                    </div>
+                                `;
+                return;
+            }
+
+            const itemsHtml = items.map(item => `
+                                <div class="cart-item" data-sushi-id="${item.sushi_id}">
+                                    <img src="${item.photo || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjgwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmNWY1ZjUiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjEyIiBmaWxsPSIjNjY2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+4oSWU3VzaGk8L3RleHQ+PC9zdmc+'}"
+                                         alt="${item.name}" class="item-image">
+                                    <div class="item-name">${item.name}</div>
+                                    <div class="item-price">${item.cost} ₽</div>
+                                    <div class="quantity-controls">
+                                        <button class="quantity-btn" onclick="changeQuantity(${item.sushi_id}, -1)">-</button>
+                                        <span class="quantity">${item.quantity}</span>
+                                        <button class="quantity-btn" onclick="changeQuantity(${item.sushi_id}, 1)">+</button>
+                                    </div>
+                                    <div class="item-total">${item.total_cost} ₽</div>
+                                    <button class="remove-btn" onclick="removeFromCart(${item.sushi_id})">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            `).join('');
+
+            container.innerHTML = `
+                                <div class="cart-container">
+                                    <div class="cart-items">
+                                        ${itemsHtml}
+                                    </div>
+
+                                    <div class="cart-summary">
+                                        <h3 class="summary-title">Итого</h3>
+                                        <div class="summary-item">
+                                            <span>Товары (${items.length})</span>
+                                            <span>${total} ₽</span>
+                                        </div>
+                                        <div class="summary-item">
+                                            <span>Доставка</span>
+                                            <span>Бесплатно</span>
+                                        </div>
+                                        <div class="summary-total">
+                                            <span>Общая сумма</span>
+                                            <span>${total} ₽</span>
+                                        </div>
+                                        <button class="checkout-btn" onclick="checkout()">
+                                            Оформить заказ
+                                        </button>
+                                        <button class="clear-cart-btn" onclick="clearCart()"
+                                                style="width: 100%; margin-top: 15px; padding: 10px; background: var(--gray); color: white; border: none; border-radius: 5px; cursor: pointer;">
+                                            Очистить корзину
+                                        </button>
+                                    </div>
+                                </div>
+                            `;
+        }
+
+        async function changeQuantity(sushiId, delta) {
+            try {
+                const response = await fetch('/api/Sushi/cart/update', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        sushi_id: sushiId,
+                        quantity: delta
+                    })
+                });
+
+                if (response.ok) {
+                    await loadCart(); // Перезагружаем корзину
+                } else {
+                    alert('Ошибка при изменении количества');
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+                alert('Ошибка при изменении количества');
+            }
+        }
+
+        async function removeFromCart(sushiId) {
+            if (!confirm('Удалить товар из корзины?')) return;
+
+            try {
+                const response = await fetch('/api/Sushi/cart/delete', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ sushi_id: sushiId })
+                });
+
+                if (response.ok) {
+                    await loadCart(); // Перезагружаем корзину
+                } else {
+                    alert('Ошибка при удалении товара');
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+                alert('Ошибка при удалении товара');
+            }
+        }
+
+        async function clearCart() {
+            if (!confirm('Очистить всю корзину?')) return;
+
+            try {
+                const response = await fetch('/api/Sushi/cart/clear', {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    await loadCart(); // Перезагружаем корзину
+                } else {
+                    alert('Ошибка при очистке корзины');
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+                alert('Ошибка при очистке корзины');
+            }
+        }
+
+        function checkout() {
+            alert('Функция оформления заказа будет реализована в следующем обновлении!');
+            // Здесь будет реализация оформления заказа
+        }
+    </script>
+</body>
+</html>
