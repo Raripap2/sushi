@@ -3,8 +3,8 @@
     private readonly RequestDelegate _next;
     private readonly List<string> _allowedPaths = new()
     {
-        "/api/Users/aut",       // ← ИСПРАВЛЕНО! Полный путь к авторизации
-        "/api/Users/logout",    // ← Добавьте для logout если будете делать
+        "/api/Users/aut",       
+        "/api/Users/logout",   
         "/api/Users/add",
         "/login",
         "/login.html",
@@ -22,8 +22,8 @@
 
     private readonly List<string> _allowedPatterns = new()
     {
-        "/api/aut",         // Паттерн для любых путей содержащих /api/aut
-        "/api/logout"       // Паттерн для любых путей содержащих /api/logout
+        "/api/aut",         
+        "/api/logout"       
     };
 
     public AuthMiddleware(RequestDelegate next)
@@ -33,10 +33,8 @@
 
     public async Task Invoke(HttpContext context)
     {
-        // Проверяем, нужно ли пропускать запрос без авторизации
         if (ShouldSkipAuth(context))
         {
-            // Если пользователь уже авторизован и пытается зайти на страницу логина - перенаправляем на профиль
             if (IsAuthenticated(context) && IsLoginPage(context.Request.Path))
             {
                 context.Response.Redirect("/profile");
@@ -86,20 +84,16 @@
     {
         var path = context.Request.Path;
 
-        // Пропускаем OPTIONS запросы (для CORS)
         if (context.Request.Method == "OPTIONS")
             return true;
 
-        // Главная страница
         if (path == "/" || string.IsNullOrEmpty(path.Value))
             return true;
 
-        // Проверяем точное совпадение с allowed paths
         if (_allowedPaths.Any(allowedPath =>
             path.StartsWithSegments(allowedPath, StringComparison.OrdinalIgnoreCase)))
             return true;
 
-        // Проверяем по паттернам (содержит часть пути)
         if (_allowedPatterns.Any(pattern =>
             path.Value.Contains(pattern, StringComparison.OrdinalIgnoreCase)))
             return true;
